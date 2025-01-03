@@ -13,6 +13,7 @@ const FormPage = () => {
 
   const handleChange = (e) => {
     const { name, type } = e.target;
+    // Handle file input differently from text inputs
     const value = type === 'file' ? e.target.files[0] : e.target.value;
     setFormData(prev => ({
       ...prev,
@@ -23,24 +24,20 @@ const FormPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.name || !formData.email || !formData.file) {
-      alert('Please fill all fields');
-      return;
-    };
     try {
       const formDataToSend = new FormData();
-
       formDataToSend.append('Name', formData.name);
       formDataToSend.append('email', formData.email);
-      formDataToSend.append('File', formData.file); 
-      
+      if (formData.file) {
+        formDataToSend.append('File', formData.file); // Changed to match the backend 'File'
+      }
       const response = await axios.post(API_URL, formDataToSend, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       alert('Form submitted successfully!');
-      setFormData({ name: '', email: '', file: null });
+      setFormData({ name: '', email: '', file: null }); // Reset form
     } catch (error) {
-      console.error("Error submitting form:", error.response.data);
+      console.error("Error submitting form:", error);
     }
   };
 
@@ -107,6 +104,7 @@ const FormPage = () => {
                       name="file"
                       onChange={handleChange}
                       className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                      required
                     />
                     <span className="text-sm text-gray-500">
                       Click to upload or drag and drop

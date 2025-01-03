@@ -27,12 +27,15 @@ const FormPage = () => {
       alert('Please fill all fields');
       return;
     };
+
     try {
       const formDataToSend = new FormData();
 
       formDataToSend.append('Name', formData.name);
       formDataToSend.append('email', formData.email);
+      if(formData.file){
       formDataToSend.append('File', formData.file); 
+      }
       
       const response = await axios.post(API_URL, formDataToSend, {
         headers: { 'Content-Type': 'multipart/form-data' }

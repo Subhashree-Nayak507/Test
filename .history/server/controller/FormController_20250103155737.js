@@ -7,15 +7,14 @@ export const FormController = async (req, res) => {
 
     console.log('Request body:', req.body);
     console.log('Request file:', req.file);
-
-    const existingEmail = await Form.findOne({email});
+    const existingEmail = await Form.findOne({ email: email });
     if (existingEmail) {
         return res.status(400).json({ error: 'Email already exists' });
-    };
+    }
 
     if (!req.file) {
       return res.status(400).json({ error: 'No file uploaded' });
-    };
+    } 
 
     const fileUrl = await uploadFileToCloudinary(req.file.path);
     const formData = {

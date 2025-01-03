@@ -26,14 +26,14 @@ const FormPage = () => {
     if (!formData.name || !formData.email || !formData.file) {
       alert('Please fill all fields');
       return;
-    };
+    }
     try {
       const formDataToSend = new FormData();
-
       formDataToSend.append('Name', formData.name);
       formDataToSend.append('email', formData.email);
-      formDataToSend.append('File', formData.file); 
-      
+      if (formData.file) {
+        formDataToSend.append('File', formData.file); 
+      };
       const response = await axios.post(API_URL, formDataToSend, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
@@ -107,6 +107,7 @@ const FormPage = () => {
                       name="file"
                       onChange={handleChange}
                       className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                      required
                     />
                     <span className="text-sm text-gray-500">
                       Click to upload or drag and drop
