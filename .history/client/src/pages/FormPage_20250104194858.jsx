@@ -11,7 +11,7 @@ const FormPage = () => {
     file: null,
     fileName: '',
   });
-
+  
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -68,7 +68,7 @@ const FormPage = () => {
                 <input
                   type="text"
                   value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  onChange={() => setName(e.target.value)}
                   className="pl-10 w-full rounded-lg border border-gray-200 py-3 text-sm outline-none focus:border-indigo-500 
                   focus:ring-1 focus:ring-indigo-500"
                   placeholder="Enter your name"
@@ -87,7 +87,7 @@ const FormPage = () => {
                 <input
                   type="email"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={() => setEmail(e.target.value)}
                   className="pl-10 w-full rounded-lg border border-gray-200 py-3 text-sm outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
                   placeholder="Enter your email"
                 />
