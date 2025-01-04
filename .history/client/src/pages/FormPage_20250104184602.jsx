@@ -1,51 +1,69 @@
 import React, { useState } from 'react';
 import { Mail, User, Upload } from 'lucide-react';
-import axios from 'axios';
-
-const API_URL = 'http://localhost:5000/api/form';
 
 const FormPage = () => {
-  const [name, setName] = useState(''); 
-  const [email, setEmail] = useState(''); 
+  // Separate state for form input and file
+  const [formInputs, setFormInputs] = useState({
+    name: '',
+    email: '',
+  });
   const [fileData, setFileData] = useState({
     file: null,
-    fileName: '',
+    fileName: ''
   });
 
-  const handleNameChange = (e) => setName(e.target.value);
-  const handleEmailChange = (e) => setEmail(e.target.value);
+  // Handle text input changes
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormInputs(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  // Handle file input changes
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       setFileData({
         file: file,
-        fileName: file.name,
+        fileName: file.name
       });
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!name.trim() || !email.trim() || !fileData.file) {
+    // Validate inputs
+    if (!formInputs.name.trim() || !formInputs.email.trim() || !fileData.file) {
       alert('Please fill in all fields');
       return;
     }
+
     try {
       const formDataToSend = new FormData();
-      formDataToSend.append('Name', name.trim());
-      formDataToSend.append('email', email.trim());
+      
+      // Append text inputs
+      formDataToSend.append('Name', formInputs.name.trim());
+      formDataToSend.append('email', formInputs.email.trim());
+      
+      // Append file only if it exists
       if (fileData.file) {
         formDataToSend.append('File', fileData.file);
       }
-      const response = await axios.post(API_URL, formDataToSend, {
-        headers: { 'Content-Type': 'multipart/form-data' },
+
+      // Example API call (commented out)
+       const response = await axios.post(API_URL, formDataToSend, {
+         headers: { 'Content-Type': 'multipart/form-data' }
       });
-      setName('');
-      setEmail('');
+
+      // Reset form after successful submission
+      setFormInputs({ name: '', email: '' });
       setFileData({ file: null, fileName: '' });
       alert('Form submitted successfully!');
+      
     } catch (error) {
-      console.log(error);
+      console.log(error.response?.data);
     }
   };
 
@@ -69,10 +87,10 @@ const FormPage = () => {
                 </div>
                 <input
                   type="text"
-                  value={name}
-                  onChange={handleNameChange}
-                  className="pl-10 w-full rounded-lg border border-gray-200 py-3 text-sm outline-none focus:border-indigo-500 
-                  focus:ring-1 focus:ring-indigo-500"
+                  name="name"
+                  value={formInputs.name}
+                  onChange={handleInputChange}
+                  className="pl-10 w-full rounded-lg border border-gray-200 py-3 text-sm outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
                   placeholder="Enter your name"
                 />
               </div>
@@ -88,8 +106,9 @@ const FormPage = () => {
                 </div>
                 <input
                   type="email"
-                  value={email}
-                  onChange={handleEmailChange}
+                  name="email"
+                  value={formInputs.email}
+                  onChange={handleInputChange}
                   className="pl-10 w-full rounded-lg border border-gray-200 py-3 text-sm outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
                   placeholder="Enter your email"
                 />
@@ -119,8 +138,7 @@ const FormPage = () => {
 
             <button
               type="submit"
-              className="w-full bg-indigo-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-indigo-700
-               transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              className="w-full bg-indigo-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-indigo-700 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
               Submit Form
             </button>

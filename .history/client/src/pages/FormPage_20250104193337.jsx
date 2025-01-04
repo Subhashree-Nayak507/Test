@@ -5,15 +5,18 @@ import axios from 'axios';
 const API_URL = 'http://localhost:5000/api/form';
 
 const FormPage = () => {
-  const [name, setName] = useState(''); 
-  const [email, setEmail] = useState(''); 
+  const [name, setName] = useState(''); // Separate state for name
+  const [email, setEmail] = useState(''); // Separate state for email
   const [fileData, setFileData] = useState({
     file: null,
     fileName: '',
   });
 
+  // Handle individual input changes
   const handleNameChange = (e) => setName(e.target.value);
   const handleEmailChange = (e) => setEmail(e.target.value);
+
+  // Handle file input changes
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
