@@ -7,21 +7,21 @@ import LoginPage from './pages/LoginPage';
 import { checkAuth } from './store/AuthSlice/AuthSlice.js';
 
 const App = () => {
-  const { isAuthenticated } = useSelector((state) => state.auth);
+  const { isAuthenticated, isLoading } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const checkUserAuth = async () => {
-      try {
-        await dispatch(checkAuth()).unwrap();
-      } catch (err) {
-        console.log('Auth check failed:', err);
-      }
-    };
-    checkUserAuth();
+    dispatch(checkAuth());
   }, [dispatch]);
 
-
+  // Show loading state while checking authentication
+  if (isLoading) {
+    return <div>Loading...</div>; // You can replace this with a proper loading component
+  }
+// Add this temporarily to your frontend to check cookie content
+useEffect(() => {
+  console.log('All cookies:', document.cookie);
+}, []);
   const PublicRoute = ({ children }) => {
     if (isAuthenticated) {
       return <Navigate to="/formPage" replace />;
@@ -31,7 +31,8 @@ const App = () => {
 
   const ProtectedRoute = ({ children }) => {
     if (!isAuthenticated) {
-      return <Navigate to="/login"  />;
+      // Store the attempted URL to redirect back after login
+      return <Navigate to="/login" state={{ from: window.location.pathname }} replace />;
     }
     return children;
   };

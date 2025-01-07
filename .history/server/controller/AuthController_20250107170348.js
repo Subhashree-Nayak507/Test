@@ -58,7 +58,6 @@ export const LogoutController = (req, res) => {
 
 export const checkAuth = (req, res) => {
     try {
-       const user= req.user;
         if (!req.user){
              return res.status(401).json({
                 succcess:false,

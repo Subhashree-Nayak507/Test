@@ -11,15 +11,18 @@ const App = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    // Run check auth on initial load
     const checkUserAuth = async () => {
       try {
         await dispatch(checkAuth()).unwrap();
       } catch (err) {
-        console.log('Auth check failed:', err);
+        console.error('Auth check failed:', err);
       }
     };
     checkUserAuth();
   }, [dispatch]);
+
+
 
 
   const PublicRoute = ({ children }) => {
@@ -31,7 +34,8 @@ const App = () => {
 
   const ProtectedRoute = ({ children }) => {
     if (!isAuthenticated) {
-      return <Navigate to="/login"  />;
+      // Store the attempted URL to redirect back after login
+      return <Navigate to="/login" state={{ from: window.location.pathname }} replace />;
     }
     return children;
   };

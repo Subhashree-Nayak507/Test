@@ -45,13 +45,17 @@ const FormPage = () => {
       if (fileData.file) {
         formDataToSend.append('File', fileData.file);
       }
+
+      // Updated axios configuration
       const response = await axios.post(API_URL, formDataToSend, {
-        withCredentials: true, 
+        withCredentials: true, // Add this to send cookies
         headers: { 
           'Content-Type': 'multipart/form-data'
         }
       });
+
       console.log('Form submission response:', response.data);
+      
       setName('');
       setEmail('');
       setFileData({ file: null, fileName: '' });

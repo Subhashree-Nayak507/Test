@@ -4,7 +4,6 @@ import { connectDb } from './db/db.js';
 import router from './routes/FormRoute.js';
 import cors from 'cors';
 import AuthRouter from './routes/UserRoutes.js';
-import cookieParser from 'cookie-parser';
 
 dotenv.config();
 const app = express();
@@ -16,16 +15,12 @@ app.use(
       allowedHeaders: [
         "Content-Type",
         "Authorization",
-        "Cache-Control",
-        "Expires",
-        "Pragma",
       ],
       credentials: true,
     })
   );
   
 app.use(express.json());
-app.use(cookieParser());  
 
 app.use('/api/auth',AuthRouter);
 app.use('/api',router);

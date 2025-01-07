@@ -15,7 +15,7 @@ const App = () => {
       try {
         await dispatch(checkAuth()).unwrap();
       } catch (err) {
-        console.log('Auth check failed:', err);
+        console.error('Auth check failed:', err);
       }
     };
     checkUserAuth();
@@ -31,7 +31,8 @@ const App = () => {
 
   const ProtectedRoute = ({ children }) => {
     if (!isAuthenticated) {
-      return <Navigate to="/login"  />;
+      // Store the attempted URL to redirect back after login
+      return <Navigate to="/login" />;
     }
     return children;
   };

@@ -65,7 +65,11 @@ export const checkAuth = createAsyncThunk(
       const response = await axios.get(
         "http://localhost:5000/api/auth/check-auth",
         {
-          withCredentials: true
+          withCredentials: true,
+          headers: {
+            "Cache-Control":
+              "no-store, no-cache, must-revalidate, proxy-revalidate",
+          },
         }
       );
       return response.data;
@@ -133,10 +137,9 @@ const authSlice = createSlice({
       })
       .addCase(checkAuth.fulfilled, (state, action) => {
         state.isLoading = false;
-        console.log('Authenticated user:', action.payload); 
-        state.user = action.payload.user;
-        state.isAuthenticated = true;
-     })     
+        state.user = action.payload.success ? action.payload.user : null;
+        state.isAuthenticated = action.payload.success;
+      })
       .addCase(checkAuth.rejected, (state) => {
         state.isLoading = false;
         state.user = null;

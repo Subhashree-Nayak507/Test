@@ -11,6 +11,7 @@ const App = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    // Run check auth on initial load
     const checkUserAuth = async () => {
       try {
         await dispatch(checkAuth()).unwrap();

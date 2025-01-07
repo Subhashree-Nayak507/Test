@@ -16,6 +16,7 @@ const FormPage = () => {
     fileName: '',
   });
 
+  // Check authentication
   useEffect(() => {
     if (!isAuthenticated) {
       navigate('/login');
@@ -45,25 +46,38 @@ const FormPage = () => {
       if (fileData.file) {
         formDataToSend.append('File', fileData.file);
       }
+
+      // Updated axios configuration
       const response = await axios.post(API_URL, formDataToSend, {
-        withCredentials: true, 
+        withCredentials: true, // Add this to send cookies
         headers: { 
           'Content-Type': 'multipart/form-data'
         }
       });
+
       console.log('Form submission response:', response.data);
+      
       setName('');
       setEmail('');
       setFileData({ file: null, fileName: '' });
       alert('Form submitted successfully!');
     } catch (error) {
       console.error('Form submission error:', error.response?.data || error);
+      if (error.response?.status === 401) {
+        alert('Please login again to submit the form');
+        navigate('/login');
+      } else {
+        alert('Error submitting form. Please try again.');
+      }
     }
   };
+
+  // Add loading state check
   if (!isAuthenticated) {
-    return null; 
+    return null; // or a loading spinner
   }
 
+  // Rest of your component remains the same
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-50 py-12 px-4">
     <div className="max-w-md mx-auto bg-white rounded-xl shadow-lg">

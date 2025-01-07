@@ -58,16 +58,15 @@ export const LogoutController = (req, res) => {
 
 export const checkAuth = (req, res) => {
     try {
-       const user= req.user;
         if (!req.user){
-             return res.status(401).json({
+            res.status(401).json({
                 succcess:false,
                 message:"Unauthorized requests"
             })
         }
-       return res.status(200).json(req.user);
+      res.status(200).json(req.user);
     } catch (e) {
       console.log("Error in checkAuth controller", e);
-     res.status(500).json({ message: "Internal Server Error" });
+      res.status(500).json({ message: "Internal Server Error" });
     }
   };
